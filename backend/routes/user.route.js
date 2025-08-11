@@ -1,5 +1,11 @@
 import { body } from "express-validator";
-import { register, loginUser } from "../controller/user.controller.js";
+import {
+  register,
+  loginUser,
+  logoutUser,
+  getUserprofile,
+} from "../controller/user.controller.js";
+import { authUser } from "../middleware/auth.middleware.js";
 
 import { Router } from "express";
 
@@ -28,4 +34,8 @@ router.post(
   ],
   loginUser
 );
+
+router.get("/profile", authUser, getUserprofile);
+router.get("/logout", authUser, logoutUser);
+
 export default router;
