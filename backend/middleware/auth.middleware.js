@@ -32,7 +32,6 @@ const authCaptain = async (req, res, next) => {
   if (!token) {
     return res.status(401).json({ message: "unauthorized" });
   }
-
   const isBlacklisted = await blacklistTokenSchema.findOne({ token: token });
 
   if (isBlacklisted) {
@@ -43,7 +42,6 @@ const authCaptain = async (req, res, next) => {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
     const captain = await captionModel.findById(decoded._id);
     req.captain = captain;
-
     return next();
   } catch (error) {
     res.status(401).json({ message: error.message });
