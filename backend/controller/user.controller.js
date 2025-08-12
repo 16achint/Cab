@@ -10,6 +10,12 @@ const register = async (req, res) => {
   }
 
   const { fullname, email, password } = req.body;
+
+  const isUserExist = await userModel.findOne({ email });
+
+  if (isUserExist) {
+    return res.status(400).json({ message: "user already exist" });
+  }
   const { firstname, lastname } = fullname;
 
   const hashpassword = await userModel.hashPassword(password);
