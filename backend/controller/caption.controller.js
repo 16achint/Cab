@@ -41,7 +41,6 @@ const loginCaption = async (req, res) => {
     return res.status(400).json({ errors: errors.array() });
   }
   const { email, password } = req.body;
-
   const caption = await captionModel.findOne({ email }).select("+password");
 
   if (!caption) {
@@ -50,29 +49,28 @@ const loginCaption = async (req, res) => {
   const isMatched = await caption.comparePassword(password);
 
   if (!isMatched) {
-    return res.status(401).json({ message: "invalid email or password" });
+    return res.status(401).json({ message: "invalid password" });
   }
-
   const token = caption.generateAuthToken();
+
+  const { password: _, ...captionData } = caption.toObject();
 
   res.cookie("token", token);
 
-  res.status(200).json({ token, caption });
+  res.status(200).json({ token, caption: captionData });
 };
 
 const getCaptionprofile = async (req, res) => {
-  res.status(200).json(req.caption);
+  res.status(200).json({ data: req.captain });
 };
 
 const logoutCaption = async (req, res) => {
-  res.clearCookie("token");
-  const token = req.cookie.token || req.headers.authorization?.split(" ")[1];
+  const token = req.cookies.token || req.headers.authorization?.split(" ")[1];
 
   await blacklistToken.create({ token: token });
 
+  res.clearCookie("token");
   res.status(200).json({ message: "Logged out" });
 };
 
 export { registerCaptain, loginCaption, getCaptionprofile, logoutCaption };
-
-/// check caption register on postman direct now
