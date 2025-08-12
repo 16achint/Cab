@@ -63,7 +63,7 @@ const getUserprofile = async (req, res) => {
 
 const logoutUser = async (req, res) => {
   res.clearCookie("token");
-  const token = req.cookie.token || req.headers.authorization?.split(" ")[1];
+  const token = req.cookies.token || req.headers.authorization?.split(" ")[1];
 
   await blacklistToken.create({ token: token });
 
