@@ -1,5 +1,7 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { CaptainDataContext } from "../context/CaptainContext";
+import axios from "axios";
 
 const CaptainSignup = () => {
   const [email, setEmail] = useState("");
@@ -11,6 +13,9 @@ const CaptainSignup = () => {
   const [vehiclePlate, setVehiclePlate] = useState("");
   const [vehicleCapacity, setVehicleCapacity] = useState("");
   const [vehicleType, setVehicleType] = useState("");
+
+  const { capacity, setCaptain } = useContext(CaptainDataContext);
+  const navigate = useNavigate();
 
   const submitHandler = async (e) => {
     e.preventDefault();
@@ -28,6 +33,18 @@ const CaptainSignup = () => {
         vehicleType: vehicleType,
       },
     };
+
+    const response = await axios.post(
+      `${import.meta.env.VITE_BASE_URL}/captain/register`,
+      captainData
+    );
+
+    console.log("response", response);
+
+    // if (response.ok) {
+    //   setCaptain(response.data.captain);
+    //   navigate("/home");
+    // }
 
     setEmail("");
     setFirstName("");
