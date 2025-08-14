@@ -4,7 +4,8 @@ import UserLogin from "./pages/Userlogin";
 import UserSignup from "./pages/UserSignup";
 import CaptionLogin from "./pages/CaptionLogin";
 import CaptainSignup from "./pages/CaptainSignup";
-import UserProctectWrapper from "./pages/UserProctectWrapper";
+import UserProctectWrapper from "./wrapper/UserProctectWrapper";
+import CaptainProtectWrapper from "./wrapper/CaptainProctectWrapper";
 import UserLogout from "./pages/UserLogout";
 import Home from "./pages/Home";
 import CaptainHome from "./pages/CaptainHome";
@@ -36,7 +37,14 @@ function App() {
 
         <Route path="/captain-login" element={<CaptionLogin />} />
         <Route path="/captain-signup" element={<CaptainSignup />} />
-        <Route path="/captain-home" element={<CaptainHome />} />
+        <Route
+          path="/captain-home"
+          element={
+            <CaptainProtectWrapper>
+              <CaptainHome />
+            </CaptainProtectWrapper>
+          }
+        />
       </Routes>
     </div>
   );

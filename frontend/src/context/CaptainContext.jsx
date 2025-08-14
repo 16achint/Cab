@@ -2,7 +2,7 @@ import { createContext, useState } from "react";
 
 export const CaptainDataContext = createContext();
 
-function CaptainContext({ childern }) {
+function CaptainContext({ children }) {
   const [captain, setCaptain] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -24,7 +24,7 @@ function CaptainContext({ childern }) {
   return (
     <div>
       <CaptainDataContext.Provider value={value}>
-        {childern}
+        {children}
       </CaptainDataContext.Provider>
     </div>
   );
