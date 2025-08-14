@@ -10,7 +10,7 @@ const registerCaptain = async (req, res) => {
     return res.status(400).json({ errors: errors.array() });
   }
 
-  const { fullname, email, password, vehicle, location } = req.body;
+  const { fullname, email, password, vehicle } = req.body;
 
   const isCaptionExist = await captionModel.findOne({ email });
   if (isCaptionExist) {
@@ -27,7 +27,6 @@ const registerCaptain = async (req, res) => {
     email,
     password: hashpassword,
     vehicle,
-    location,
   });
 
   const token = caption.generateAuthToken();
@@ -57,11 +56,11 @@ const loginCaption = async (req, res) => {
 
   res.cookie("token", token);
 
-  res.status(200).json({ token, caption: captionData });
+  res.status(200).json({ token, captain: captionData });
 };
 
 const getCaptionprofile = async (req, res) => {
-  res.status(200).json({ data: req.captain });
+  res.status(200).json({ captain: req.captain });
 };
 
 const logoutCaption = async (req, res) => {
