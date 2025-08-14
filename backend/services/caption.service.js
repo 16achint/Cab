@@ -6,10 +6,8 @@ const createCaption = async ({
   email,
   password,
   vehicle,
-  location,
 }) => {
   const { color, plate, capacity, vehicleType } = vehicle;
-  const { lat, lng } = location;
 
   const fields = [
     { name: "firstname", value: firstname },
@@ -19,8 +17,6 @@ const createCaption = async ({
     { name: "vehicle.plate", value: plate },
     { name: "vehicle.capacity", value: capacity },
     { name: "vehicle.vehicleType", value: vehicleType },
-    { name: "location.lat", value: lat },
-    { name: "location.lng", value: lng },
   ];
 
   const missingFields = fields
@@ -49,7 +45,6 @@ const createCaption = async ({
       capacity,
       vehicleType,
     },
-    location: { lat, lng },
   });
 
   return caption;
