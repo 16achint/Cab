@@ -4,70 +4,70 @@ import { validationResult } from "express-validator";
 import blacklistToken from "../models/blacklistToken.model.js";
 
 const register = async (req, res) => {
-  const errors = validationResult(req);
-  if (!errors.isEmpty()) {
-    return res.status(400).json({ errors: errors.array() });
-  }
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.array() });
+    }
 
-  const { fullname, email, password } = req.body;
+    const { fullname, email, password } = req.body;
 
-  const isUserExist = await userModel.findOne({ email });
+    const isUserExist = await userModel.findOne({ email });
 
-  if (isUserExist) {
-    return res.status(400).json({ message: "user already exist" });
-  }
-  const { firstname, lastname } = fullname;
+    if (isUserExist) {
+        return res.status(400).json({ message: "user already exist" });
+    }
+    const { firstname, lastname } = fullname;
 
-  const hashpassword = await userModel.hashPassword(password);
+    const hashpassword = await userModel.hashPassword(password);
 
-  const user = await createUser({
-    firstname,
-    lastname,
-    email,
-    password: hashpassword,
-  });
+    const user = await createUser({
+        firstname,
+        lastname,
+        email,
+        password: hashpassword,
+    });
 
-  const token = user.generateAuthToken();
+    const token = user.generateAuthToken();
 
-  res.status(201).json({ user, token });
+    res.status(201).json({ user, token });
 };
 
 const loginUser = async (req, res) => {
-  const errors = validationResult(req);
-  if (!errors.isEmpty()) {
-    return res.status(400).json({ errors: errors.array() });
-  }
-  const { email, password } = req.body;
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.array() });
+    }
+    const { email, password } = req.body;
 
-  const user = await userModel.findOne({ email }).select("+password");
+    const user = await userModel.findOne({ email }).select("+password");
 
-  if (!user) {
-    return res.status(401).json({ message: "invalid email or password" });
-  }
-  const isMatched = await user.comparePassword(password);
+    if (!user) {
+        return res.status(401).json({ message: "invalid email or password" });
+    }
+    const isMatched = await user.comparePassword(password);
 
-  if (!isMatched) {
-    return res.status(401).json({ message: "invalid email or password" });
-  }
+    if (!isMatched) {
+        return res.status(401).json({ message: "invalid email or password" });
+    }
 
-  const token = user.generateAuthToken();
+    const token = user.generateAuthToken();
 
-  res.cookie("token", token);
+    res.cookie("token", token);
 
-  res.status(200).json({ token, user });
+    res.status(200).json({ token, user });
 };
 
 const getUserprofile = async (req, res) => {
-  res.status(200).json(req.user);
+    res.status(200).json(req.user);
 };
 
 const logoutUser = async (req, res) => {
-  res.clearCookie("token");
-  const token = req.cookies.token || req.headers.authorization?.split(" ")[1];
+    res.clearCookie("token");
+    const token = req.cookies.token || req.headers.authorization?.split(" ")[1];
 
-  await blacklistToken.create({ token: token });
+    await blacklistToken.create({ token: token });
 
-  res.status(200).json({ message: "Logged out" });
+    res.status(200).json({ message: "Logged out" });
 };
 
 export { register, loginUser, getUserprofile, logoutUser };
