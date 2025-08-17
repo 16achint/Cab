@@ -15,8 +15,10 @@ app.use(cookieParser());
 
 import userRoutes from "./routes/user.route.js";
 import captionRoutes from "./routes/caption.route.js";
+import mapRoutes from "./routes/map.routes.js";
 app.use("/users", userRoutes);
 app.use("/captain", captionRoutes);
+app.use("/map", mapRoutes);
 
 app.get("/", (req, res) => {
   res.send("server is healthy 🍀");
