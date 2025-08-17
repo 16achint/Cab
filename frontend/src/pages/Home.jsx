@@ -23,11 +23,11 @@ const Home = () => {
   const [confirmRidePanel, setConfirmRidePanel] = useState(false);
   const [vehicleFound, setVehicleFound] = useState(false);
   const [waitingForDriver, setWaitingForDriver] = useState(false);
-  const [pickupSuggestions, setPickupSuggestions] = useState([]);
-  const [destinationSuggestions, setDestinationSuggestions] = useState([]);
-  const [activeField, setActiveField] = useState(null);
-  const [fare, setFare] = useState({});
-  const [vehicleType, setVehicleType] = useState(null);
+  // const [pickupSuggestions, setPickupSuggestions] = useState([]);
+  // const [destinationSuggestions, setDestinationSuggestions] = useState([]);
+  // const [activeField, setActiveField] = useState(null);
+  // const [fare, setFare] = useState({});
+  // const [vehicleType, setVehicleType] = useState(null);
 
   const submitHandler = (e) => {
     e.preventDefault();
