@@ -72,4 +72,4 @@ const createRideService = async ({ user, pickup, destination, vehicleType }) => 
     return ride;
 };
 
-export { createRideService };
+export { createRideService, getFare };
