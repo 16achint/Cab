@@ -1,8 +1,9 @@
-// import React, { useContext } from "react";
-// import { CaptainDataContext } from "../context/CapatainContext";
+import React, { useContext } from "react";
+import { CaptainDataContext } from "../context/CaptainContext"
 
 const CaptainDetails = () => {
-  // const { captain } = useContext(CaptainDataContext);
+  const { captain } = useContext(CaptainDataContext)
+  console.log("captain", captain.fullname.firstname)
 
   return (
     <div>
@@ -13,10 +14,8 @@ const CaptainDetails = () => {
             src="https://animegenius-global.live3d.io/vtuber/ai_product/anime_genius/static/imgs/cover_adfec2f98c5418cdf818bc4cfba4c307.webp"
             alt=""
           />
-          {/* <h4 className="text-lg font-medium capitalize">
-            {captain.fullname.firstname + " " + captain.fullname.lastname}
-          </h4> */}
-          <h4>Achint Jain</h4>
+          <h4 className="text-lg font-medium capitalize">{captain.fullname.firstname + " " + captain.fullname.lastname}</h4>
+
         </div>
         <div>
           <h4 className="text-xl font-semibold">₹295.20</h4>

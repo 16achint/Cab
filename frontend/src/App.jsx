@@ -44,10 +44,10 @@ function App() {
         <Route
           path="/captain-home"
           element={
-            // <CaptainProtectWrapper>
-            //   <CaptainHome />
-            // </CaptainProtectWrapper>
-            <CaptainHome />
+            <CaptainProtectWrapper>
+              <CaptainHome />
+            </CaptainProtectWrapper>
+            // <CaptainHome />
           }
         />
       </Routes>
