@@ -14,7 +14,6 @@ function UserProctectWrapper({ children }) {
       navigate("/login");
     }
 
-    console.log("hello check");
     axios
       .get(`${import.meta.env.VITE_BASE_URL}/users/profile`, {
         headers: {
@@ -23,14 +22,12 @@ function UserProctectWrapper({ children }) {
       })
       .then((response) => {
         if (response.status === 200) {
-          console.log("hello");
           const data = response.data;
-          setuser(data.user);
+          setuser(data);
           setIsLoading(false);
         }
       })
       .catch((error) => {
-        console.log("hello check error");
         localStorage.removeItem("token");
         navigate("/login");
       });
