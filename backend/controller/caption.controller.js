@@ -41,19 +41,15 @@ const loginCaption = async (req, res) => {
     }
     const { email, password } = req.body;
     const caption = await captionModel.findOne({ email }).select("+password");
-
     if (!caption) {
         return res.status(401).json({ message: "invalid email or password" });
     }
     const isMatched = await caption.comparePassword(password);
-
     if (!isMatched) {
         return res.status(401).json({ message: "invalid password" });
     }
     const token = caption.generateAuthToken();
-
     const { password: _, ...captionData } = caption.toObject();
-
     res.cookie("token", token);
 
     res.status(200).json({ token, captain: captionData });
