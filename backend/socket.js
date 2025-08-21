@@ -17,7 +17,6 @@ function initializeSocket(server) {
 
         socket.on("join", async (data) => {
             const { userId, userType } = data;
-            console.log("data", data);
             if (userType == "user") {
                 await userModel.findByIdAndUpdate(userId, { socketId: socket.id });
             }
@@ -48,7 +47,6 @@ function initializeSocket(server) {
 
 const sendMessageToSocketId = (socketId, messageObject) => {
     if (io) {
-        console.log("hello achint here messageObject", messageObject);
         io.to(socketId).emit(messageObject.event, messageObject.data);
     } else {
         console.log("Socket.io not initialized");
