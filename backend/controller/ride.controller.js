@@ -11,6 +11,7 @@ const createRide = async (req, res) => {
     }
 
     const { pickup, destination, vehicleType } = req.body;
+    console.log("req", req);
     try {
         // Do all async work first
         const ride = await createRideService({ user: req.user._id, pickup, destination, vehicleType });
@@ -45,6 +46,7 @@ const confirmRide = async (req, res) => {
     }
 
     const { rideId } = req.body;
+    console.log("rideId", rideId);
     try {
         const ride = await confirmRideService({ rideId, captain: req.captain });
         sendMessageToSocketId(ride.user.socketId, { event: "ride-confirmed", data: ride });
@@ -62,9 +64,15 @@ const startRide = async (req, res) => {
     }
 
     const { rideId, otp } = req.query;
-
-    const ride = await startRideService({ rideId, otp, captain: req.captain });
-    sendMessageToSocketId(ride.user.socketId, { event: "ride-start", data: ride });
+    try {
+        const ride = await startRideService({ rideId, otp, captain: req.captain });
+        sendMessageToSocketId(ride.user.socketId, { event: "ride-started", data: ride });
+        console.log("ride", ride);
+        return res.status(200).json(ride);
+    } catch (error) {
+        console.log("error", error);
+        return res.status(500).json({ message: error.message });
+    }
 };
 
 const getRideFare = async (req, res) => {
