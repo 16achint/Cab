@@ -8,7 +8,6 @@ const LocationSearchPanel = (props) => {
   //   "20B, Near Singhai's cafe, Sheryians Coding School, Bhopal",
   //   "18A, Near Sharma's cafe, Sheryians Coding School, Bhopal",
   // ];
-  console.log("props", props)
   const handleSuggestionClick = (suggestion) => {
     if (props.activeField === 'pickup') {
       props.setPickup(suggestion);
