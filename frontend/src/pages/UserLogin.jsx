@@ -13,15 +13,20 @@ function UserLogin() {
   const submitHandler = async (e) => {
     e.preventDefault();
 
+
     const userData = {
       email: email,
       password: password,
     };
 
+    console.log("userData", userData);
+
     const response = await axios.post(
       `${import.meta.env.VITE_BASE_URL}/users/login`,
       userData
     );
+
+    console.log("response", response);
     if (response.status === 200) {
       const data = response.data;
       setuser(data.user);
