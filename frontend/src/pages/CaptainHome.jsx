@@ -89,7 +89,6 @@ const CaptainHome = () => {
     console.log("rideid", ride._id);
     console.log("captainId", captain._id);
     const response = await axios.post(`${import.meta.env.VITE_BASE_URL}/ride/confirm`,
-
       {
         rideId: ride._id,
         captainId: captain._id
@@ -99,6 +98,12 @@ const CaptainHome = () => {
           Authorization: `bearer ${localStorage.getItem("token")}`
         }
       })
+
+    console.log("response", response);
+
+    if (response.status === 200) {
+      setConfirmRidePopupPanel(true)
+    }
 
     setRidePopupPanel(false)
     setConfirmRidePopupPanel(true)
