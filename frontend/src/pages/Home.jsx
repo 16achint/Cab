@@ -135,14 +135,12 @@ const Home = () => {
 
   const fetchSuggestions = debounce(async (value, setSuggestions) => {
     try {
-      console.log(value)
       const response = await axios.get(`${import.meta.env.VITE_BASE_URL}/map/get-suggestions`, {
         params: { input: value },
         headers: {
           Authorization: `Bearer ${localStorage.getItem('token')}`
         }
       });
-      console.log(response)
       setSuggestions(response.data);
     } catch (error) {
       console.error("Error fetching suggestions:", error);
@@ -205,21 +203,22 @@ const Home = () => {
   const { user } = useContext(userDataContext)
 
   useEffect(() => {
-    console.log("user useEffect", user)
     socket.emit("join", { userType: "user", userId: user._id })
-
-
-    socket.on('ride-confirmed', ride => {
-      setRide(ride)
-      setVehicleFound(false)
-      setWaitingForDriver(true)
-    })
-
-    socket.on('ride-started', (ride) => {
-      setWaitingForDriver(false)
-      navigate('/riding')
-    })
   }, [user])
+
+  socket.on('ride-confirmed', ride => {
+    setRide(ride)
+    setVehicleFound(false)
+    setWaitingForDriver(true)
+  })
+
+  socket.on('ride-started', (ride) => {
+    console.log("ride started", ride);
+    setWaitingForDriver(false);
+    // navigate('/riding');
+    navigate('/riding', { state: { ride } });
+  });
+
 
   return (
     <div className="h-screen relative overflow-hidden">
@@ -340,6 +339,7 @@ const Home = () => {
           ride={ride}
           setVehicleFound={setVehicleFound}
           setWaitingForDriver={setWaitingForDriver}
+          // setRidePopupPanel={setRidePopupPanel}
           waitingForDriver={waitingForDriver} />
       </div>
     </div>
