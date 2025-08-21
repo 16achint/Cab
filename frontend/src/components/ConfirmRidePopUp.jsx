@@ -14,7 +14,7 @@ const ConfirmRidePopUp = (props) => {
     console.log(" rideId, otp", props.ride._id, otp)
     const response = await axios.get(`${import.meta.env.VITE_BASE_URL}/ride/start-ride`,
       {
-        param: {
+        params: {
           rideId: props.ride._id,
           otp: otp
         }, headers: {
@@ -22,6 +22,8 @@ const ConfirmRidePopUp = (props) => {
         }
       }
     )
+
+    console.log("response => ", response);
 
     if (response.status === 200) {
       props.setConfirmRidePopupPanel(false)
@@ -103,14 +105,8 @@ const ConfirmRidePopUp = (props) => {
               Confirm
             </Link> */}
             <button
-              onClick={() => {
-                props.setConfirmRidePopupPanel(false);
-                props.setRidePopupPanel(false);
-              }}
-              className="w-full mt-2 bg-red-600 text-lg text-white font-semibold p-3 rounded-lg"
-            >
-              Cancel
-            </button>
+              onClick={() => { props.setConfirmRidePopupPanel(false); props.setRidePopupPanel(false) }}
+              className="w-full mt-2 bg-red-600 text-lg text-white font-semibold p-3 rounded-lg">Cancel</button>
           </form>
         </div>
       </div>
