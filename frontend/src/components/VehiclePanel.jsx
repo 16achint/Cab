@@ -1,7 +1,6 @@
 import React from "react";
 
 const VehiclePanel = (props) => {
-  console.log("props", props)
   return (
     <div>
       <h5
