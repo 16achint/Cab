@@ -79,7 +79,7 @@ const confirmRideService = async ({ rideId, captain }) => {
     }
 
     await rideModel.findByIdAndUpdate({ _id: rideId }, { status: "accepted", captain: captain._id }).populate("user");
-    const ride = await rideModel.findOne({ _id: rideId }).populate("user").populate("captain").select("otp");
+    const ride = await rideModel.findOne({ _id: rideId }).populate("user").populate("captain").select("+otp");
     console.log("ride", ride);
     if (!ride) {
         throw new Error("Ride not found");
@@ -91,11 +91,13 @@ const startRideService = async ({ rideId, otp, captain }) => {
     if (!rideId || !otp || !captain) {
         throw new Error("RideId, OTP and Captain are required");
     }
-    const ride = await rideModel.findOne({ _id: rideId }).populate("user").populate("captain").select("otp");
+    const ride = await rideModel.findOne({ _id: rideId }).populate("user").populate("captain").select("+otp");
 
     if (!ride) {
         throw new Error("Ride not found");
     }
+
+    console.log("ride start => ", ride);
 
     if (ride.status !== "accepted") {
         throw new Error("Ride is not accepted");
@@ -104,12 +106,10 @@ const startRideService = async ({ rideId, otp, captain }) => {
     if (ride.otp !== otp) {
         throw new Error("Invalid OTP");
     }
-    console.log("hello");
-    console.log(ride.otp, " ", otp);
+    // console.log(ride.otp, " ", otp);
     ride.status = "ongoing";
 
     await ride.save();
-    sendMessageToSocketId(ride.user.socketId, "ride-started", ride);
 
     return ride;
 };
