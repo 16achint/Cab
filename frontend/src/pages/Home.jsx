@@ -8,8 +8,16 @@ import ConfirmRide from "../components/ConfirmRide";
 import LookingForDriver from "../components/LookingForDriver";
 import WaitingForDriver from "../components/WaitingForDriver"
 import axios from "axios"
+import { useEffect } from "react";
+import { SocketContext } from "../context/SocketContext";
+import { userDataContext } from "../context/UserContext";
+import { useContext } from "react";
+import { useNavigate } from "react-router-dom";
 
 const Home = () => {
+
+  const navigate = useNavigate()
+
   const [pickup, setPickup] = useState("");
   const [destination, setDestination] = useState("");
   const [panelOpen, setPanelOpen] = useState(false);
@@ -29,83 +37,7 @@ const Home = () => {
   const [activeField, setActiveField] = useState(null);
   const [fare, setFare] = useState({});
   const [vehicleType, setVehicleType] = useState(null);
-
-
-
-
-  // Debounce utility
-  const debounce = (fn, delay) => {
-    let timer;
-    return (...args) => {
-      clearTimeout(timer);
-      timer = setTimeout(() => fn(...args), delay);
-    };
-  };
-
-  const fetchSuggestions = debounce(async (value, setSuggestions) => {
-    try {
-      console.log(value)
-      const response = await axios.get(`${import.meta.env.VITE_BASE_URL}/map/get-suggestions`, {
-        params: { input: value },
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem('token')}`
-        }
-      });
-      console.log(response)
-      setSuggestions(response.data);
-    } catch (error) {
-      console.error("Error fetching suggestions:", error);
-    }
-  }, 500);
-
-  const handlePickupChange = (e) => {
-    const value = e.target.value;
-    setPickup(value);
-    if (pickup.length > 3) {
-      fetchSuggestions(value, setPickupSuggestions);
-    }
-  };
-
-  const handleDestinationChange = (e) => {
-    const value = e.target.value;
-    setDestination(value);
-    if (destination.length > 3) {
-      fetchSuggestions(value, setDestinationSuggestions);
-    }
-  };
-
-  async function findTrip() {
-    setVehiclePanel(true)
-    setPanelOpen(false)
-
-    const response = await axios.get(`${import.meta.env.VITE_BASE_URL}/ride/get-fare`, {
-      params: { pickup, destination },
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem('token')}`
-      }
-    })
-
-
-
-    setFare(response.data)
-
-  }
-
-  async function createRide() {
-    const response = await axios.post(`${import.meta.env.VITE_BASE_URL}/ride/create`, {
-      pickup,
-      destination,
-      vehicleType
-    }, {
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem("token")}`
-      }
-    })
-  }
-
-  const submitHandler = (e) => {
-    e.preventDefault();
-  };
+  const [ride, setRide] = useState(null)
 
   useGSAP(
     function () {
@@ -191,6 +123,103 @@ const Home = () => {
     },
     [waitingForDriver]
   );
+
+  // Debounce utility
+  const debounce = (fn, delay) => {
+    let timer;
+    return (...args) => {
+      clearTimeout(timer);
+      timer = setTimeout(() => fn(...args), delay);
+    };
+  };
+
+  const fetchSuggestions = debounce(async (value, setSuggestions) => {
+    try {
+      console.log(value)
+      const response = await axios.get(`${import.meta.env.VITE_BASE_URL}/map/get-suggestions`, {
+        params: { input: value },
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('token')}`
+        }
+      });
+      console.log(response)
+      setSuggestions(response.data);
+    } catch (error) {
+      console.error("Error fetching suggestions:", error);
+    }
+  }, 500);
+
+  const handlePickupChange = (e) => {
+    const value = e.target.value;
+    setPickup(value);
+    if (pickup.length > 3) {
+      fetchSuggestions(value, setPickupSuggestions);
+    }
+  };
+
+  const handleDestinationChange = (e) => {
+    const value = e.target.value;
+    setDestination(value);
+    if (destination.length > 3) {
+      fetchSuggestions(value, setDestinationSuggestions);
+    }
+  };
+
+  async function findTrip() {
+    setVehiclePanel(true)
+    setPanelOpen(false)
+
+    const response = await axios.get(`${import.meta.env.VITE_BASE_URL}/ride/get-fare`, {
+      params: { pickup, destination },
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem('token')}`
+      }
+    })
+
+
+
+    setFare(response.data)
+
+  }
+
+  async function createRide() {
+    const response = await axios.post(`${import.meta.env.VITE_BASE_URL}/ride/create-ride`, {
+      pickup,
+      destination,
+      vehicleType
+    }, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem('token')}`
+      }
+    })
+
+
+  }
+
+
+  const submitHandler = (e) => {
+    e.preventDefault();
+  };
+
+  const { socket } = useContext(SocketContext)
+  const { user } = useContext(userDataContext)
+
+  useEffect(() => {
+    console.log("user useEffect", user)
+    socket.emit("join", { userType: "user", userId: user._id })
+
+
+    socket.on('ride-confirmed', ride => {
+      setRide(ride)
+      setVehicleFound(false)
+      setWaitingForDriver(true)
+    })
+
+    socket.on('ride-started', (ride) => {
+      setWaitingForDriver(false)
+      navigate('/riding')
+    })
+  }, [user])
 
   return (
     <div className="h-screen relative overflow-hidden">
@@ -307,7 +336,11 @@ const Home = () => {
         ref={waitingForDriverRef}
         className="fixed w-full z-10 bottom-0 bg-white px-3 py-6 pt-12"
       >
-        <WaitingForDriver waitingForDriver={waitingForDriver} />
+        <WaitingForDriver
+          ride={ride}
+          setVehicleFound={setVehicleFound}
+          setWaitingForDriver={setWaitingForDriver}
+          waitingForDriver={waitingForDriver} />
       </div>
     </div>
   );
