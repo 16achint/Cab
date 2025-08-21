@@ -24,7 +24,7 @@ const Captainlogin = () => {
       captain
     );
 
-    console.log(response);
+    console.log("hello")
 
     if (response.status === 200) {
       const data = response.data;
