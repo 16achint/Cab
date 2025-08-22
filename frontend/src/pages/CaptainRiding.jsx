@@ -39,7 +39,7 @@ const CaptainRiding = () => {
             </div>
 
             <div className='h-4/5'>
-                <img className='h-full w-full object-cover' src="https://miro.medium.com/v2/resize:fit:1400/0*gwMx05pqII5hbfmX.gif" alt="" />
+                <LiveTracking />
 
             </div>
 
@@ -59,10 +59,9 @@ const CaptainRiding = () => {
                     ride={rideData}
                     setFinishRidePanel={setFinishRidePanel} />
             </div>
-            {/* 
             <div className='h-screen fixed w-screen top-0 z-[-1]'>
                 <LiveTracking />
-            </div> */}
+            </div>
 
         </div>
     )

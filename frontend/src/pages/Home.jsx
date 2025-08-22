@@ -7,7 +7,7 @@ import VehiclePanel from "../components/VehiclePanel";
 import ConfirmRide from "../components/ConfirmRide";
 import LookingForDriver from "../components/LookingForDriver";
 import WaitingForDriver from "../components/WaitingForDriver"
-import FinishRide from "../components/FinishRide";
+import LiveTracking from "../components/LiveTracking";
 import axios from "axios"
 import { useEffect } from "react";
 import { SocketContext } from "../context/SocketContext";
@@ -228,12 +228,7 @@ const Home = () => {
         alt=""
       />
       <div className="h-screen w-screen">
-        {/* image for temporary use  */}
-        <img
-          className="h-full w-full object-cover"
-          src="https://miro.medium.com/v2/resize:fit:1400/0*gwMx05pqII5hbfmX.gif"
-          alt=""
-        />
+        <LiveTracking />
       </div>
       <div className=" flex flex-col justify-end h-screen absolute top-0 w-full">
         <div className="h-[30%] p-6 bg-white relative">
