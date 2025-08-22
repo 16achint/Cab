@@ -1,19 +1,30 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import LiveTracking from "../components/LiveTracking"
-import { Link, useLocation } from 'react-router-dom' // Added useLocation
+import { Link, useLocation, useNavigate } from 'react-router-dom' // Added useLocation
+import { SocketContext } from "../context/SocketContext"
+
 
 const Riding = () => {
     const location = useLocation()
     const { ride } = location.state || {} // Retrieve ride data
+    const navigate = useNavigate()
 
-    console.log("ride here => ", ride)
+
+    const { socket } = useContext(SocketContext);
+    socket.on("ride-ended", () => {
+        console.log("Ride ended event emitted from client");
+        navigate("/home");
+    });
+
+
+
     return (
         <div className='h-screen'>
             <Link to='/home' className='fixed right-2 top-2 h-10 w-10 bg-white flex items-center justify-center rounded-full'>
                 <i className="text-lg font-medium ri-home-5-line"></i>
             </Link>
             <div className='h-1/2'>
-                <LiveTracking />
+                {/* <LiveTracking /> */}
 
             </div>
             <div className='h-1/2 p-4'>
