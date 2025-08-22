@@ -1,7 +1,7 @@
 import express from "express";
 const route = express.Router();
 import { body, query } from "express-validator";
-import { createRide, getRideFare, confirmRide, startRide } from "../controller/ride.controller.js";
+import { createRide, getRideFare, confirmRide, startRide, endRide } from "../controller/ride.controller.js";
 import { authCaptain, authUser } from "../middleware/auth.middleware.js";
 
 route.post(
@@ -31,10 +31,6 @@ route.get(
     startRide
 );
 
-// router.post('/end-ride',
-//     authMiddleware.authCaptain,
-//     body('rideId').isMongoId().withMessage('Invalid ride id'),
-//     rideController.endRide
-// )
+route.post("/end-ride", authCaptain, body("rideId").isMongoId().withMessage("Invalid ride id"), endRide);
 
 export default route;
