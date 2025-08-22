@@ -1,7 +1,6 @@
 import rideModel from "../models/ride.model.js";
 import { getDistanceTimeService } from "../services/map.service.js";
 import crypto from "crypto";
-import { sendMessageToSocketId } from "../socket.js";
 
 async function getFare(pickUp, destination) {
     if (!pickUp || !destination) {
@@ -114,4 +113,23 @@ const startRideService = async ({ rideId, otp, captain }) => {
     return ride;
 };
 
-export { createRideService, getFare, confirmRideService, startRideService };
+const endRideService = async ({ rideId, captain }) => {
+    if (!rideId || !captain) {
+        throw new Error("RideId and Captain are required");
+    }
+
+    const ride = await rideModel
+        .findOne({ _id: rideId, captain: captain._id })
+        .populate("user")
+        .populate("captain")
+        .select("+otp");
+
+    if (!ride) {
+        throw new Error("Ride not found");
+    }
+
+    await rideModel.findByIdAndUpdate({ _id: rideId }, { status: "completed" });
+    return ride;
+};
+
+export { createRideService, getFare, confirmRideService, startRideService, endRideService };
