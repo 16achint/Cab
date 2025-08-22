@@ -7,6 +7,7 @@ import VehiclePanel from "../components/VehiclePanel";
 import ConfirmRide from "../components/ConfirmRide";
 import LookingForDriver from "../components/LookingForDriver";
 import WaitingForDriver from "../components/WaitingForDriver"
+import FinishRide from "../components/FinishRide";
 import axios from "axios"
 import { useEffect } from "react";
 import { SocketContext } from "../context/SocketContext";
@@ -215,7 +216,6 @@ const Home = () => {
   socket.on('ride-started', (ride) => {
     console.log("ride started", ride);
     setWaitingForDriver(false);
-    // navigate('/riding');
     navigate('/riding', { state: { ride } });
   });
 
@@ -330,7 +330,6 @@ const Home = () => {
           setConfirmRidePanel={setConfirmRidePanel}
         />
       </div>
-
       <div
         ref={waitingForDriverRef}
         className="fixed w-full z-10 bottom-0 bg-white px-3 py-6 pt-12"
@@ -339,7 +338,6 @@ const Home = () => {
           ride={ride}
           setVehicleFound={setVehicleFound}
           setWaitingForDriver={setWaitingForDriver}
-          // setRidePopupPanel={setRidePopupPanel}
           waitingForDriver={waitingForDriver} />
       </div>
     </div>
