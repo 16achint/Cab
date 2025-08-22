@@ -101,9 +101,6 @@ const ConfirmRidePopUp = (props) => {
             <button className="w-full mt-5 text-lg flex justify-center bg-green-600 text-white font-semibold p-3 rounded-lg">
               Confirm
             </button>
-            {/* <Link to='/captain-riding' className="w-full mt-5 text-lg flex justify-center bg-green-600 text-white font-semibold p-3 rounded-lg">
-              Confirm
-            </Link> */}
             <button
               onClick={() => { props.setConfirmRidePopupPanel(false); props.setRidePopupPanel(false) }}
               className="w-full mt-2 bg-red-600 text-lg text-white font-semibold p-3 rounded-lg">Cancel</button>
