@@ -10,7 +10,7 @@ const CaptainRiding = () => {
 
     const [finishRidePanel, setFinishRidePanel] = useState(false)
     const finishRidePanelRef = useRef(null)
-    // const location = useLocation()
+    const location = useLocation()
     const rideData = location.state?.ride
 
 
